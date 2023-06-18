@@ -16,7 +16,7 @@ IServiceProvider serviceProvider = InitializeDependency(configuration);
 
  IChangestreamJob changestream = GetImplementation<IChangestreamJob>(serviceProvider);
 
-changestream.Processchange();
+
 
 
 TService GetImplementation<TService>(IServiceProvider serviceProvider) where TService : class
