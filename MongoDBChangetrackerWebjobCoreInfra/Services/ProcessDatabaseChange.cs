@@ -1,9 +1,4 @@
 ﻿using MongoDBChangetrackerWebjobCore.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MongoDBChangetrackerWebjobCoreInfra.Services
 {
@@ -12,7 +7,7 @@ namespace MongoDBChangetrackerWebjobCoreInfra.Services
 
         public bool PushChange(string changeData)
         {
-            return false;
+            return true;
         }
 
     }
