@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MongoDBChangetrackerWebjobCore.Handler.Interface
 {
-    internal interface IBackfillerHandler
+    public interface IBackfillerHandler
     {
-
+        void StartBackFiller();
     }
 }

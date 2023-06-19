@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using MongoDBChangetrackerWebjobCore.Repositories.Interface;
 
@@ -11,9 +12,7 @@ namespace MongoDBChangetrackerWebjobCoreInfra.Repositories
     {
         private readonly MongoClient _mongoClient;
       
-        //private readonly IConfiguration _configuration;
-
-
+ 
         
         public ChangestreamJob(MongoClient mongoClient)
         {
@@ -35,10 +34,9 @@ namespace MongoDBChangetrackerWebjobCoreInfra.Repositories
             {
                 while (enumerator.MoveNext())
                 {
-                    var change = enumerator.Current;
-                    var document = change.FullDocument; // Access the changed document
-                   Console.WriteLine(document);
-                    operation(change.ToJson());
+                   
+
+                    operation(ConvertChangestreamtoJson(enumerator.Current));
                 }
             }
 
@@ -46,6 +44,27 @@ namespace MongoDBChangetrackerWebjobCoreInfra.Repositories
 
         }
 
+
+        private string ConvertChangestreamtoJson(ChangeStreamDocument<BsonDocument> changeStreamDoc)
+        {
+
+            var jsonObject = new
+            {
+                DocumentKey = changeStreamDoc.DocumentKey.ToJson(),
+                OperationType = changeStreamDoc.OperationType,
+                FullDocument = changeStreamDoc.FullDocument.ToJson(),
+                DatabaseNamespace = changeStreamDoc.DatabaseNamespace.DatabaseName,
+                collectionNamespace = changeStreamDoc.CollectionNamespace.CollectionName,
+                UpdateDescription = changeStreamDoc.UpdateDescription.UpdatedFields.ToJson(),
+                
+            };
+
+
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject);
+
+        }
+        
 
     }
 }

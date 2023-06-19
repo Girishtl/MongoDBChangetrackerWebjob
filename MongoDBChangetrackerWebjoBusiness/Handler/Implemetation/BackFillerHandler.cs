@@ -1,4 +1,5 @@
-﻿using MongoDBChangetrackerWebjobCore.Repositories.Interface;
+﻿using MongoDBChangetrackerWebjobCore.Handler.Interface;
+using MongoDBChangetrackerWebjobCore.Repositories.Interface;
 using MongoDBChangetrackerWebjobCore.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MongoDBChangetrackerWebjobCore.Handler.Implemetation
 {
-    public class BackFillerHandler
+    public class BackFillerHandler : IBackfillerHandler
     {
 
         private readonly IChangestreamJob _changestreamJob;
@@ -22,7 +23,7 @@ namespace MongoDBChangetrackerWebjobCore.Handler.Implemetation
             _processDatabaseChange = processDatabaseChange;
         }
 
-        void StartBackFiller()
+        public void StartBackFiller()
         {
             _changestreamJob.WatchDatabsechange(_processDatabaseChange.PushChange);
 

@@ -1,4 +1,6 @@
-﻿using MongoDBChangetrackerWebjobCore.Services.Interface;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDBChangetrackerWebjobCore.Services.Interface;
 
 namespace MongoDBChangetrackerWebjobCoreInfra.Services
 {

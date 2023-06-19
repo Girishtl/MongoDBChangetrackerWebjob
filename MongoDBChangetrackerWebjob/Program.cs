@@ -4,9 +4,11 @@ using MongoDB.Driver;
 using MongoDBChangetrackerWebjobCore.Repositories.Interface;
 using MongoDBChangetrackerWebjobCoreInfra.Repositories;
 using Microsoft.Extensions.Logging;
-
-
-
+using MongoDBChangetrackerWebjobCore.Handler.Implemetation;
+using MongoDBChangetrackerWebjobCore.Handler.Interface;
+using System;
+using MongoDBChangetrackerWebjobCore.Services.Interface;
+using MongoDBChangetrackerWebjobCoreInfra.Services;
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -14,10 +16,16 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 
 IServiceProvider serviceProvider = InitializeDependency(configuration);
 
- IChangestreamJob changestream = GetImplementation<IChangestreamJob>(serviceProvider);
+IBackfillerHandler  backfillerHandler= GetImplementation<IBackfillerHandler>(serviceProvider);
 
-
-
+try
+{
+    backfillerHandler.StartBackFiller();
+}
+catch(Exception ex)
+{
+    Console.WriteLine(ex.ToString());
+}
 
 TService GetImplementation<TService>(IServiceProvider serviceProvider) where TService : class
 {
@@ -38,7 +46,8 @@ IServiceProvider InitializeDependency(IConfiguration configuration)
     services.AddLogging();
     services.AddSingleton(new MongoClient(configuration["ConnectionStrings"]));
     services.AddTransient<IChangestreamJob, ChangestreamJob>();
- 
+    services.AddTransient<IBackfillerHandler, BackFillerHandler>();
+    services.AddTransient<IProcessDatabaseChange, ProcessDatabaseChange>();
 
 
     return services.BuildServiceProvider();
